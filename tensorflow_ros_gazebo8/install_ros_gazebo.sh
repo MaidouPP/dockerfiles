@@ -13,7 +13,7 @@ set -e
 #######
 
 apt-get update
-apt-get install wget git tmux -y
+apt-get install wget git tmux vim -y
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
 apt-get update 1>/dev/null
@@ -27,10 +27,19 @@ apt-get install python-rosinstall python-catkin-tools python-rosinstall-generato
 
 mkdir -p ~/catkin_ws/src
 pushd ~/catkin_ws/src > /dev/null
+git clone https://github.com/MaidouPP/init_new_machine.git
 git clone https://github.com/fetchrobotics/fetch_ros.git
+git clone -b gazebo7 https://github.com/MaidouPP/fetch_gazebo.git
 git clone https://github.com/MaidouPP/robot_follower.git
 git clone https://github.com/MaidouPP/gazebo_plugins.git
 mv gazebo_plugins/* . && rm -rf gazebo_plugins
+# change the hard-coded path
+pushd ./simulation_walk/launch > /dev/null
+sed -i -e "s/home\/users\/lshixin/root/g" simulate.launch
+popd > /dev/null
+pushd walking_person_plugin/world > /dev/null
+sed -i -e "s/home\/users\/lshixin/root/g" walking_map.world
+popd > /dev/null
 popd > /dev/null
 echo "${green}[Finished ROS installation and configuration.]${endcolor}"
 
