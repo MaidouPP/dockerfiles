@@ -5,12 +5,15 @@ chmod 755 /root
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Fix a warning.
-apt-get --yes install apt-utils
+apt-get -y update && apt-get install -y
 
 # Install essential software.
 apt-get --yes install \
         vim curl wget git openssh-client tmux screen less rsync cmake netcat
+
+# Allow any user to access "sudo" without password.
+apt-get -y install sudo
+echo "ALL ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/allow_all
 
 # Install python dependencies.
 apt-get --yes install python-pip
